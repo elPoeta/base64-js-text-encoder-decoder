@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base64 Encoder/Decoder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 1280px;
+      text-align: center;
+
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .output {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      word-wrap: break-word;
+      background-color: #f9f9f9;
+    }
+
+    .output button {
+      margin-top: 10px;
+      background-color: #008CBA;
+    }
+
+    .output button:hover {
+      background-color: #007bb5;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Base64 Encoder/Decoder</h1>
+  <section class=grid-container> 
+<div>  
+<h3>Encode</h3>
+  <textarea id="encodeText" placeholder="Enter text to encode..."></textarea>
+  <button onclick="encodeText()">Encode</button>
+  <div id="encodedResult" class="output">
+    <span></span>
+    </br>
+    </br>
+    <button onclick="copyToClipboard('encodedResult')">Copy to Clipboard</button>
+  </div>
+</div>  
+
+  <div>
+  <h3>Decode</h3>
+  <textarea id="decodeText" placeholder="Enter base64 string to decode..."></textarea>
+  <button onclick="decodeText()">Decode</button>
+  <div id="decodedResult" class="output">
+    <span></span>
+    </br>
+     </br>
+    <button onclick="copyToClipboard('decodedResult')">Copy to Clipboard</button>
+  </div>
+</div>
+</section>
+</div>
+
+<script>
+
+  function encodeText() {
+    const text = document.getElementById('encodeText').value;
+    const resultDiv = document.getElementById('encodedResult');
+    if (text) {
+      const encoded = btoa(text); 
+      resultDiv.querySelector('span').textContent = `Encoded: ${encoded}`;
+      resultDiv.classList.remove('error');
+    } else {
+      resultDiv.querySelector('span').textContent = 'Please enter text to encode.';
+      resultDiv.classList.add('error');
+    }
+  }
+
+ 
+  function decodeText() {
+    const base64String = document.getElementById('decodeText').value;
+    const resultDiv = document.getElementById('decodedResult');
+    try {
+      if (base64String) {
+        const decoded = atob(base64String); 
+        resultDiv.querySelector('span').textContent = `Decoded: ${decoded}`;
+        resultDiv.classList.remove('error');
+      } else {
+        resultDiv.querySelector('span').textContent = 'Please enter a Base64 string to decode.';
+        resultDiv.classList.add('error');
+      }
+    } catch (e) {
+      resultDiv.querySelector('span').textContent = 'Invalid Base64 string!';
+      resultDiv.classList.add('error');
+    }
+  }
+
+
+  function copyToClipboard(resultId) {
+    const resultDiv = document.getElementById(resultId);
+    const text = resultDiv.querySelector('span').textContent;
+    
+    if (text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text.replace(/^.*?:\s*/, ''); 
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      alert('Copied to clipboard!');
+    }
+  }
+</script>
+
+</body>
+</html>
+
